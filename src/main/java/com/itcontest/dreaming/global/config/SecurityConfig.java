@@ -1,0 +1,55 @@
+package com.itcontest.dreaming.global.config;
+
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
+public class SecurityConfig {
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        permitAllForOAuthEndpoints(http);
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
+                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .build();
+    }
+
+    private void permitAllForOAuthEndpoints(HttpSecurity http) throws Exception {
+        String[] permittedUrls = {
+                "/api/google/token",
+                "/api/kakao/token",
+                "/api/token/access",
+        };
+
+        for (String url : permittedUrls) {
+            http.authorizeHttpRequests(authorize -> authorize.requestMatchers(antMatcher(url)).permitAll());
+        }
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return webSecurity -> webSecurity.ignoring()
+                .requestMatchers("/v3/docs/**", "/v3/api-docs/**", "/swagger-ui/**", "/favicon.ico");
+    }
+
+}
