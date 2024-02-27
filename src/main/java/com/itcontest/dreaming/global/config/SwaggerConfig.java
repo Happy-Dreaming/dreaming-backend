@@ -24,7 +24,7 @@ public class SwaggerConfig {
                 .version("v0.0.1")
                 .description("Dreaming 문서");
 
-        String authName = "Json Web Token";
+        String authName = "JsonWebToken";
 
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(authName);
         Components components = new Components()
