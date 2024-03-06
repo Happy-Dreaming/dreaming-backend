@@ -1,6 +1,8 @@
 package com.itcontest.dreaming.auth.exception;
 
-public class InvalidTokenException extends RuntimeException {
+import com.itcontest.dreaming.global.error.exception.InvalidGroupException;
+
+public class InvalidTokenException extends InvalidGroupException {
     public InvalidTokenException(String message) {
         super(message);
     }
