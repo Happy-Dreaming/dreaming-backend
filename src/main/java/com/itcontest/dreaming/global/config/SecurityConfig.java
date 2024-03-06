@@ -2,6 +2,7 @@ package com.itcontest.dreaming.global.config;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
+import com.itcontest.dreaming.global.error.exception.CustomAuthenticationFailureHandler;
 import com.itcontest.dreaming.global.jwt.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +36,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated())
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(handle -> handle.authenticationEntryPoint(new CustomAuthenticationFailureHandler()))
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }

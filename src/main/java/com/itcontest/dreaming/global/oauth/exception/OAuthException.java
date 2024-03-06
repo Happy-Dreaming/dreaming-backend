@@ -1,6 +1,8 @@
 package com.itcontest.dreaming.global.oauth.exception;
 
-public class OAuthException extends RuntimeException {
+import com.itcontest.dreaming.global.error.exception.AuthGroupException;
+
+public class OAuthException extends AuthGroupException {
     public OAuthException(String message) {
         super(message);
     }
