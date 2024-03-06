@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class KakaoTokenResponse{
+public class KakaoTokenResponse {
     String idToken;
 
     public KakaoTokenResponse(String idToken) {

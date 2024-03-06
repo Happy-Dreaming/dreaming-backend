@@ -7,8 +7,10 @@ import com.itcontest.dreaming.member.domain.Role;
 import com.itcontest.dreaming.member.domain.repository.MemberRepository;
 import java.util.Random;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class AuthMemberService {
 
     private final MemberRepository memberRepository;
@@ -20,6 +22,7 @@ public class AuthMemberService {
         this.memberRepository = memberRepository;
     }
 
+    @Transactional
     public MemberLoginResDto saveUserInfo(UserInfo userInfo) {
         Member member = memberRepository.findByEmail(userInfo.email()).orElseGet(() -> createMember(userInfo));
 
